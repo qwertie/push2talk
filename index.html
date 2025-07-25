@@ -62,6 +62,7 @@
         }
         
         .status {
+            flex: 1;
             text-align: center;
             margin-top: 10px;
             font-weight: bold;
@@ -105,7 +106,14 @@
         
         <textarea id="textArea" placeholder="Click here and hold Ctrl to use SpeechRecognition"></textarea>
         
-        <div class="status" id="status">Ready</div>
+        <div style="display: flex; flex-direction: row">
+            <div class="status" id="status">Ready</div>
+            <label style="margin-left:10px; display:flex; align-items:center; gap:6px;">
+                <input type="checkbox" id="rememberText">
+                Ask browser to save text
+            </label>
+        </div>
+        
     </div>
 
     <script>
@@ -114,7 +122,8 @@
                 this.textArea = document.getElementById('textArea');
                 this.status = document.getElementById('status');
                 this.browserWarning = document.getElementById('browserWarning');
-                
+                this.rememberCheckbox = document.getElementById('rememberText');
+
                 this.recognition = null;
                 this.isRecording = false;
                 this.isTalkPressed = false;
@@ -143,6 +152,32 @@
                 this.setupKeyboardEvents();
                 
                 this.updateStatus('Ready', 'ready');
+                this.initRememberCheckbox();
+            }
+
+            initRememberCheckbox() {
+                // Load remembered text if enabled
+                const remembered = localStorage.getItem('push2talk_remember');
+                if (remembered) {
+                    this.textArea.value = remembered;
+                    this.rememberCheckbox.checked = true;
+                }
+
+                // Save text on change if remember is checked
+                this.textArea.addEventListener('input', () => {
+                    if (this.rememberCheckbox.checked) {
+                        localStorage.setItem('push2talk_remember', this.textArea.value);
+                    }
+                });
+
+                // Handle checkbox toggle
+                this.rememberCheckbox.addEventListener('change', () => {
+                    if (this.rememberCheckbox.checked) {
+                        localStorage.setItem('push2talk_remember', this.textArea.value);
+                    } else {
+                        localStorage.removeItem('push2talk_remember');
+                    }
+                });
             }
             
             setupRecognitionEvents() {
