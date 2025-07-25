@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push-to-Talk Voice Transcription</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f5f5f5;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 1280px;
+            background: white;
+            padding: 10px;
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .instructions {
+            text-align: center;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        textarea {
+            flex: 1;
+            resize: none;
+            width: 100%;
+            height: 400px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            line-height: 1.5;
+            transition: border-color 0.3s ease;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        
+        .recording {
+            border-color: #ff4444 !important;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+        }
+        
+        .status {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: bold;
+            min-height: 20px;
+        }
+        
+        .status.recording {
+            color: #ff4444;
+        }
+        
+        .status.ready {
+            color: #4CAF50;
+        }
+        
+        .status.error {
+            color: #ff6600;
+        }
+        
+        .browser-support {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h3>Push-to-Talk Voice Transcription</h3>
+        
+        <div class="browser-support" id="browserWarning">
+            ⚠️ Voice recognition may not be supported in your browser. This works best in Chrome or Edge.
+        </div>
+        
+        <div class="instructions">
+            Hold down <strong>Alt or ⌘</strong> and speak to use your browser's built-in voice recognition.
+            Why doesn't the browser support this on all web sites? Beats me. It makes no sense.
+        </div>
+        
+        <textarea id="textArea" placeholder="Click here and hold Alt or ⌘ to use SpeechRecognition"></textarea>
+        
+        <div class="status" id="status">Ready</div>
+    </div>
+
+    <script>
+        class PushToTalkApp {
+            constructor() {
+                this.textArea = document.getElementById('textArea');
+                this.status = document.getElementById('status');
+                this.browserWarning = document.getElementById('browserWarning');
+                
+                this.recognition = null;
+                this.isRecording = false;
+                this.isTalkPressed = false;
+                
+                this.init();
+            }
+            
+            init() {
+                // Check for browser support
+                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                    this.showBrowserWarning();
+                    return;
+                }
+                
+                // Initialize speech recognition
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                this.recognition = new SpeechRecognition();
+                
+                // Configure recognition
+                this.recognition.continuous = true;
+                this.recognition.interimResults = true;
+                this.recognition.lang = 'en-US';
+                
+                // Set up event listeners
+                this.setupRecognitionEvents();
+                this.setupKeyboardEvents();
+                
+                this.updateStatus('Ready', 'ready');
+            }
+            
+            setupRecognitionEvents() {
+                this.recognition.onstart = () => {
+                    this.isRecording = true;
+                    this.textArea.classList.add('recording');
+                    this.updateStatus('...', 'recording');
+                };
+                
+                this.recognition.onend = () => {
+                    this.isRecording = false;
+                    this.textArea.classList.remove('recording');
+                };
+                
+                this.recognition.onresult = (event) => {
+                    let finalTranscript = '';
+                    
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const result = event.results[i];
+                        this.showResultPreview(result);
+                        if (result.isFinal) {
+                            finalTranscript += result[0].transcript;
+                        }
+                    }
+                    
+                    if (finalTranscript) {
+                        this.insertTextAtCursor(finalTranscript + ' ');
+                    }
+                };
+                
+                this.recognition.onerror = (event) => {
+                    console.error('Speech recognition error:', event.error);
+                    this.updateStatus(`Error: ${event.error}`, 'error');
+                    
+                    // Auto-retry for certain errors
+                    if (event.error === 'no-speech' || event.error === 'audio-capture') {
+                        setTimeout(() => {
+                            if (this.isTalkPressed) {
+                                this.startRecording();
+                            }
+                        }, 100);
+                    }
+                };
+            }
+            
+            setupKeyboardEvents() {
+                document.addEventListener('keydown', (event) => {
+                    if ((event.key === 'Alt' || event.key === 'Meta') && !this.isTalkPressed) {
+                        this.isTalkPressed = true;
+                        this.startRecording();
+                    }
+                });
+                
+                document.addEventListener('keyup', (event) => {
+                    if (event.key === 'Alt' || event.key === 'Meta') {
+                        this.isTalkPressed = false;
+                        this.stopRecording();
+                    }
+                });
+                
+                // Handle window blur to stop recording if user switches tabs
+                window.addEventListener('blur', () => {
+                    this.isTalkPressed = false;
+                    this.stopRecording();
+                });
+            }
+            
+            startRecording() {
+                if (!this.recognition || this.isRecording) return;
+                
+                try {
+                    this.recognition.start();
+                } catch (error) {
+                    console.error('Failed to start recording:', error);
+                    this.updateStatus('Failed to start recording', 'error');
+                }
+            }
+            
+            stopRecording() {
+                if (!this.recognition || !this.isRecording) return;
+                
+                try {
+                    this.recognition.stop();
+                } catch (error) {
+                    console.error('Failed to stop recording:', error);
+                }
+            }
+            
+            insertTextAtCursor(text) {
+                const start = this.textArea.selectionStart;
+                const end = this.textArea.selectionEnd;
+                const before = this.textArea.value.substring(0, start);
+                const after = this.textArea.value.substring(end);
+                
+                this.textArea.value = before + text + after;
+                
+                // Move cursor to end of inserted text
+                const newCursorPos = start + text.length;
+                this.textArea.setSelectionRange(newCursorPos, newCursorPos);
+                this.textArea.focus();
+            }
+            
+            showResultPreview(result) {
+                this.status.className = `status`;
+                this.status.innerHTML = '';
+                for (let i = 0; i < result.length; i++) {
+                    const transcript = result[i].transcript;
+                    const p = document.createElement('p');
+                    p.textContent = transcript;
+                    p.style.color = result.isFinal ? '#044' : '#888';
+                    p.style.margin = '4px 4px';
+                    this.status.appendChild(p);
+                }
+            }
+
+            updateStatus(message, className = '') {
+                this.status.className = `status ${className}`;
+                this.status.textContent = message;
+            }
+            
+            showBrowserWarning() {
+                this.browserWarning.style.display = 'block';
+                this.updateStatus('Speech recognition not supported', 'error');
+            }
+        }
+        
+        // Initialize the app when the page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            new PushToTalkApp();
+        });
+    </script>
+</body>
+</html>
