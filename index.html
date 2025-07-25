@@ -33,7 +33,6 @@
         }
         
         .instructions {
-            text-align: center;
             color: #666;
             margin-bottom: 10px;
         }
@@ -239,10 +238,10 @@
                 });
                 
                 // Handle window blur to stop recording if user switches tabs
-                window.addEventListener('blur', () => {
-                    this.isTalkPressed = false;
-                    this.stopRecording();
-                });
+                // window.addEventListener('blur', () => {
+                //     this.isTalkPressed = false;
+                //     this.stopRecording();
+                // });
             }
             
             startRecording() {
