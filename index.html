@@ -99,11 +99,11 @@
         </div>
         
         <div class="instructions">
-            Hold down <strong>Alt or ⌘</strong> and speak to use your browser's built-in voice recognition.
+            Hold down <strong>Ctrl</strong> and speak to use your browser's built-in voice recognition.
             Why doesn't the browser support this on all web sites? Beats me. It makes no sense.
         </div>
         
-        <textarea id="textArea" placeholder="Click here and hold Alt or ⌘ to use SpeechRecognition"></textarea>
+        <textarea id="textArea" placeholder="Click here and hold Ctrl to use SpeechRecognition"></textarea>
         
         <div class="status" id="status">Ready</div>
     </div>
@@ -190,14 +190,14 @@
             
             setupKeyboardEvents() {
                 document.addEventListener('keydown', (event) => {
-                    if ((event.key === 'Alt' || event.key === 'Meta') && !this.isTalkPressed) {
+                    if ((event.key === 'Control') && !this.isTalkPressed) {
                         this.isTalkPressed = true;
                         this.startRecording();
                     }
                 });
                 
                 document.addEventListener('keyup', (event) => {
-                    if (event.key === 'Alt' || event.key === 'Meta') {
+                    if (event.key === 'Control') {
                         this.isTalkPressed = false;
                         this.stopRecording();
                     }
