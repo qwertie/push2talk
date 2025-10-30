@@ -98,16 +98,22 @@
             ⚠️ Voice recognition may not be supported in your browser. This works best in Chrome or Edge.
         </div>
         
-        <div class="instructions">
-            Hold down <strong>Ctrl</strong> and speak to use your browser's built-in voice recognition.
+        <div class="instructions" id="instructions">
+            Hold down <strong id="activationKeyLabel">Ctrl</strong> and speak to use your browser's built-in voice recognition.
             Why doesn't the browser support this on all web sites? Beats me. It makes no sense.
         </div>
         
         <textarea id="textArea" placeholder="Click here and hold Ctrl to use SpeechRecognition"></textarea>
         
-        <div style="display: flex; flex-direction: row">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
             <div class="status" id="status">Ready</div>
-            <label style="margin-left:10px; display:flex; align-items:center; gap:6px;">
+            Hold:
+            <select id="activationKey" title="Activation key(s) for voice">
+                <option value="Ctrl">Ctrl</option>
+                <option value="Shift">Shift</option>
+                <option value="Ctrl+Shift">Ctrl+Shift</option>
+            </select>
+            <label style="display:flex; align-items:center; gap:6px;">
                 <input type="checkbox" id="rememberText">
                 Ask browser to save text
             </label>
@@ -122,10 +128,15 @@
                 this.status = document.getElementById('status');
                 this.browserWarning = document.getElementById('browserWarning');
                 this.rememberCheckbox = document.getElementById('rememberText');
+                this.activationSelect = document.getElementById('activationKey');
+                this.activationKeyLabel = document.getElementById('activationKeyLabel');
 
                 this.recognition = null;
                 this.isRecording = false;
                 this.isTalkPressed = false;
+                this.activationMode = 'Ctrl';
+                this.ctrlDown = false;
+                this.shiftDown = false;
                 
                 this.init();
             }
@@ -152,6 +163,7 @@
                 
                 this.updateStatus('Ready', 'ready');
                 this.initRememberCheckbox();
+                this.initActivationControl();
             }
 
             initRememberCheckbox() {
@@ -177,6 +189,51 @@
                         localStorage.removeItem('push2talk_remember');
                     }
                 });
+            }
+            
+            initActivationControl() {
+                this.activationSelect.value = this.activationMode = 
+                    localStorage.getItem('push2talk_activation') || 'Ctrl';
+                this.activationSelect.addEventListener('change', () => {
+                    this.activationMode = this.activationSelect.value;
+                    localStorage.setItem('push2talk_activation', this.activationMode);
+                    this.updateInstructionText();
+                    this.startOrStopRecordingIfAppropriate();
+                });
+                this.updateInstructionText();
+            }
+            
+            computeShouldTalk() {
+                switch (this.activationMode) {
+                    case 'Shift':
+                        return this.shiftDown;
+                    case 'Ctrl+Shift':
+                        return this.ctrlDown && this.shiftDown;
+                    case 'Ctrl':
+                    default:
+                        return this.ctrlDown;
+                }
+            }
+            
+            startOrStopRecordingIfAppropriate() {
+                const shouldTalk = this.computeShouldTalk();
+                if (shouldTalk && !this.isTalkPressed) {
+                    this.isTalkPressed = true;
+                    this.startRecording();
+                } else if (!shouldTalk && this.isTalkPressed) {
+                    this.isTalkPressed = false;
+                    this.stopRecording();
+                }
+            }
+            
+            updateInstructionText() {
+                const label = this.activationMode;
+                if (this.activationKeyLabel) {
+                    this.activationKeyLabel.textContent = label;
+                }
+                if (this.textArea) {
+                    this.textArea.placeholder = `Click here and hold ${label} to use SpeechRecognition`;
+                }
             }
             
             setupRecognitionEvents() {
@@ -224,23 +281,22 @@
             
             setupKeyboardEvents() {
                 document.addEventListener('keydown', (event) => {
-                    if ((event.key === 'Control') && !this.isTalkPressed) {
-                        this.isTalkPressed = true;
-                        this.startRecording();
-                    }
+                    if (event.key === 'Control') this.ctrlDown = true;
+                    if (event.key === 'Shift') this.shiftDown = true;
+                    this.startOrStopRecordingIfAppropriate();
                 });
                 
                 document.addEventListener('keyup', (event) => {
-                    if (event.key === 'Control') {
-                        this.isTalkPressed = false;
-                        this.stopRecording();
-                    }
+                    if (event.key === 'Control') this.ctrlDown = false;
+                    if (event.key === 'Shift') this.shiftDown = false;
+                    this.startOrStopRecordingIfAppropriate();
                 });
                 
                 // Handle window blur to stop recording if user switches tabs
                 // window.addEventListener('blur', () => {
-                //     this.isTalkPressed = false;
-                //     this.stopRecording();
+                //     this.ctrlDown = false;
+                //     this.shiftDown = false;
+                //     this.startOrStopRecordingIfAppropriate();
                 // });
             }
             
