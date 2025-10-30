@@ -6,435 +6,145 @@
     <title>Push-to-Talk Voice Transcription</title>
     <style>
         * { box-sizing: border-box; }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f5f5f5;
-            height: 100vh;
-        }
-        
-        .container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            max-width: 1280px;
-            background: white;
-            padding: 10px;
-            margin: 0 auto;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            text-align: left;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .header {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .header #ttsButton {
-            position: absolute;
-            right: 0;
-        }
-
-        #ttsButton {
-            padding: 6px 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            background: #4CAF50;
-            color: #fff;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        #ttsButton:hover:enabled {
-            background: #43a047;
-        }
-
-        #ttsButton:disabled {
-            background: #ccc;
-            color: #666;
-            cursor: not-allowed;
-        }
-        
-        .instructions {
-            color: #666;
-            margin-bottom: 10px;
-        }
-        
-        textarea {
-            flex: 1;
-            resize: none;
-            width: 100%;
-            height: 400px;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            line-height: 1.5;
-            transition: border-color 0.3s ease;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-        
-        .recording {
-            border-color: #ff4444 !important;
-            box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
-        }
-        
-        .status {
-            flex: 1;
-            text-align: center;
-            margin-top: 10px;
-            font-weight: bold;
-            min-height: 20px;
-        }
-        
-        .status.recording {
-            color: #ff4444;
-        }
-        
-        .status.ready {
-            color: #4CAF50;
-        }
-        
-        .status.error {
-            color: #ff6600;
-        }
-        
-        .browser-support {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: none;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background: #f5f5f5; height: 100vh; }
+        .container { display: flex; flex-direction: column; height: 100%; max-width: 1280px; margin: 0 auto; gap: 10px; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
+        h1 { margin: 0; font-size: 24px; }
+        button { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        textarea { flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 4px; font-size: 16px; resize: none; }
+        textarea:focus { outline: none; border-color: #4CAF50; }
+        textarea.recording { border-color: #f44; box-shadow: 0 0 10px rgba(255,68,68,0.3); }
+        .controls { display: flex; align-items: center; gap: 10px; }
+        .status { flex: 1; font-style: italic; color: #888; }
+        .warning { background: #fff3cd; padding: 10px; border-radius: 4px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Push-to-Talk Voice Transcription</h1>
-            <button id="ttsButton" title="Speak selected text or all text">Speak (TTS)</button>
-        </div>
-        
-        <div class="browser-support" id="browserWarning">
-            ⚠️ Voice recognition may not be supported in your browser. This works best in Chrome or Edge.
-        </div>
-        
-        <div class="instructions" id="instructions">
-            Hold down <strong id="activationKeyLabel">Ctrl</strong> and speak to use your browser's built-in voice recognition.
-            Why doesn't the browser support this on all web sites? Beats me. It makes no sense.
-        </div>
-        
-        <textarea id="textArea" placeholder="Click here and hold Ctrl to use SpeechRecognition"></textarea>
-        
-        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-            <div class="status" id="status">Ready</div>
-            Hold:
-            <select id="activationKey" title="Activation key(s) for voice">
-                <option value="Ctrl">Ctrl</option>
-                <option value="Shift">Shift</option>
-                <option value="Ctrl+Shift">Ctrl+Shift</option>
-            </select>
-            <label style="display:flex; align-items:center; gap:6px;">
-                <input type="checkbox" id="rememberText">
-                Ask browser to save text
-            </label>
-        </div>
-        
-    </div>
 
-    <script>
-        class PushToTalkApp {
-            constructor() {
-                this.textArea = document.getElementById('textArea');
-                this.status = document.getElementById('status');
-                this.browserWarning = document.getElementById('browserWarning');
-                this.rememberCheckbox = document.getElementById('rememberText');
-                this.activationSelect = document.getElementById('activationKey');
-                this.activationKeyLabel = document.getElementById('activationKeyLabel');
-                this.ttsButton = document.getElementById('ttsButton');
+    <script type="module">
+        import { h, Component, render } from 'https://esm.sh/preact@10.19.3';
+        import { useEffect, useRef, useState } from 'https://esm.sh/preact@10.19.3/hooks';
+        import htm from 'https://esm.sh/htm@3.1.1';
 
-                this.recognition = null;
-                this.isRecording = false;
-                this.isTalkPressed = false;
-                this.activationMode = 'Ctrl';
-                this.ctrlDown = false;
-                this.shiftDown = false;
-                
-                this.init();
-            }
-            
-            init() {
-                // Check for browser support
-                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                    this.showBrowserWarning();
-                    return;
-                }
-                
-                // Initialize speech recognition
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                this.recognition = new SpeechRecognition();
-                
-                // Configure recognition
-                this.recognition.continuous = true;
-                this.recognition.interimResults = true;
-                this.recognition.lang = 'en-US';
-                
-                // Set up event listeners
-                this.setupRecognitionEvents();
-                this.setupKeyboardEvents();
-                
-                this.updateStatus('Ready', 'ready');
-                this.initRememberCheckbox();
-                this.initActivationControl();
-                this.initTTS();
-            }
+        const html = htm.bind(h);
 
-            initRememberCheckbox() {
-                // Load remembered text if enabled
-                const remembered = localStorage.getItem('push2talk_remember');
-                if (remembered) {
-                    this.textArea.value = remembered;
-                    this.rememberCheckbox.checked = true;
-                }
+        function App() {
+            const textAreaRef = useRef(null);
+            const recognitionRef = useRef(null);
+            const [text, setText] = useState('');
+            const [interim, setInterim] = useState('');
+            const [recording, setRecording] = useState(false);
+            const [warning, setWarning] = useState('');
+            const [key, setKey] = useState('Ctrl');
+            const [keys, setKeys] = useState({ ctrl: false, shift: false });
+            const [remember, setRemember] = useState(false);
 
-                // Save text on change if remember is checked
-                this.textArea.addEventListener('input', () => {
-                    if (this.rememberCheckbox.checked) {
-                        localStorage.setItem('push2talk_remember', this.textArea.value);
+            useEffect(() => {
+                const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SR) return setWarning('Speech recognition not supported');
+
+                const rec = recognitionRef.current = new SR();
+                rec.continuous = true;
+                rec.interimResults = true;
+                rec.lang = 'en-US';
+
+                rec.onstart = () => setRecording(true);
+                rec.onend = () => { setRecording(false); setInterim(''); };
+                rec.onresult = (e) => {
+                    let final = '', temp = '';
+                    for (let i = e.resultIndex; i < e.results.length; i++) {
+                        const t = e.results[i][0].transcript;
+                        if (e.results[i].isFinal) final += t; else temp = t;
                     }
-                });
-
-                // Handle checkbox toggle
-                this.rememberCheckbox.addEventListener('change', () => {
-                    if (this.rememberCheckbox.checked) {
-                        localStorage.setItem('push2talk_remember', this.textArea.value);
-                    } else {
-                        localStorage.removeItem('push2talk_remember');
-                    }
-                });
-            }
-            
-            initActivationControl() {
-                this.activationSelect.value = this.activationMode = 
-                    localStorage.getItem('push2talk_activation') || 'Ctrl';
-                this.activationSelect.addEventListener('change', () => {
-                    this.activationMode = this.activationSelect.value;
-                    localStorage.setItem('push2talk_activation', this.activationMode);
-                    this.updateInstructionText();
-                    this.startOrStopRecordingIfAppropriate();
-                });
-                this.updateInstructionText();
-            }
-            
-            computeShouldTalk() {
-                switch (this.activationMode) {
-                    case 'Shift':
-                        return this.shiftDown;
-                    case 'Ctrl+Shift':
-                        return this.ctrlDown && this.shiftDown;
-                    case 'Ctrl':
-                    default:
-                        return this.ctrlDown;
-                }
-            }
-            
-            startOrStopRecordingIfAppropriate() {
-                const shouldTalk = this.computeShouldTalk();
-                if (shouldTalk && !this.isTalkPressed) {
-                    this.isTalkPressed = true;
-                    this.startRecording();
-                } else if (!shouldTalk && this.isTalkPressed) {
-                    this.isTalkPressed = false;
-                    this.stopRecording();
-                }
-            }
-            
-            updateInstructionText() {
-                const label = this.activationMode;
-                if (this.activationKeyLabel) {
-                    this.activationKeyLabel.textContent = label;
-                }
-                if (this.textArea) {
-                    this.textArea.placeholder = `Click here and hold ${label} to use SpeechRecognition`;
-                }
-            }
-            
-            setupRecognitionEvents() {
-                this.recognition.onstart = () => {
-                    this.isRecording = true;
-                    this.textArea.classList.add('recording');
-                    this.updateStatus('...', 'recording');
-                };
-                
-                this.recognition.onend = () => {
-                    this.isRecording = false;
-                    this.textArea.classList.remove('recording');
-                };
-                
-                this.recognition.onresult = (event) => {
-                    let finalTranscript = '';
-                    
-                    for (let i = event.resultIndex; i < event.results.length; i++) {
-                        const result = event.results[i];
-                        this.showResultPreview(result);
-                        if (result.isFinal) {
-                            finalTranscript += result[0].transcript;
-                        }
-                    }
-                    
-                    if (finalTranscript) {
-                        this.insertTextAtCursor(finalTranscript + ' ');
+                    setInterim(temp);
+                    if (final) {
+                        const ta = textAreaRef.current;
+                        const start = ta.selectionStart, end = ta.selectionEnd;
+                        const newText = ta.value.slice(0, start) + final + ' ' + ta.value.slice(end);
+                        setText(newText);
+                        if (remember) localStorage.setItem('push2talk_text', newText);
+                        setTimeout(() => ta.setSelectionRange(start + final.length + 1, start + final.length + 1), 0);
                     }
                 };
-                
-                this.recognition.onerror = (event) => {
-                    console.error('Speech recognition error:', event.error);
-                    this.updateStatus(`Error: ${event.error}`, 'error');
-                    
-                    // Auto-retry for certain errors
-                    if (event.error === 'no-speech' || event.error === 'audio-capture') {
-                        setTimeout(() => {
-                            if (this.isTalkPressed) {
-                                this.startRecording();
-                            }
-                        }, 100);
-                    }
-                };
-            }
-            
-            setupKeyboardEvents() {
-                document.addEventListener('keydown', (event) => {
-                    if (event.key === 'Control') this.ctrlDown = true;
-                    if (event.key === 'Shift') this.shiftDown = true;
-                    this.startOrStopRecordingIfAppropriate();
-                });
-                
-                document.addEventListener('keyup', (event) => {
-                    if (event.key === 'Control') this.ctrlDown = false;
-                    if (event.key === 'Shift') this.shiftDown = false;
-                    this.startOrStopRecordingIfAppropriate();
-                });
-                
-                // Handle window blur to stop recording if user switches tabs
-                // window.addEventListener('blur', () => {
-                //     this.ctrlDown = false;
-                //     this.shiftDown = false;
-                //     this.startOrStopRecordingIfAppropriate();
-                // });
-            }
-            
-            startRecording() {
-                if (!this.recognition || this.isRecording) return;
-                
+                rec.onerror = (e) => setInterim(`Error: ${e.error}`);
+
+                // Load saved settings
+                const saved = localStorage.getItem('push2talk_text');
+                if (saved) { setText(saved); setRemember(true); }
+                setKey(localStorage.getItem('push2talk_key') || 'Ctrl');
+            }, []);
+
+            useEffect(() => {
+                const down = (e) => setKeys(k => ({ ...k, ctrl: e.key === 'Control' ? true : k.ctrl, shift: e.key === 'Shift' ? true : k.shift }));
+                const up = (e) => setKeys(k => ({ ...k, ctrl: e.key === 'Control' ? false : k.ctrl, shift: e.key === 'Shift' ? false : k.shift }));
+                document.addEventListener('keydown', down);
+                document.addEventListener('keyup', up);
+                return () => { document.removeEventListener('keydown', down); document.removeEventListener('keyup', up); };
+            }, []);
+
+            useEffect(() => {
+                const shouldTalk = key === 'Shift' ? keys.shift : key === 'Ctrl+Shift' ? keys.ctrl && keys.shift : keys.ctrl;
+                const rec = recognitionRef.current;
+                if (!rec) return;
                 try {
-                    this.recognition.start();
-                } catch (error) {
-                    console.error('Failed to start recording:', error);
-                    this.updateStatus('Failed to start recording', 'error');
-                }
-            }
-            
-            stopRecording() {
-                if (!this.recognition || !this.isRecording) return;
-                
-                try {
-                    this.recognition.stop();
-                } catch (error) {
-                    console.error('Failed to stop recording:', error);
-                }
-            }
-            
-            insertTextAtCursor(text) {
-                const start = this.textArea.selectionStart;
-                const end = this.textArea.selectionEnd;
-                const before = this.textArea.value.substring(0, start);
-                const after = this.textArea.value.substring(end);
-                
-                this.textArea.value = before + text + after;
-                
-                // Move cursor to end of inserted text
-                const newCursorPos = start + text.length;
-                this.textArea.setSelectionRange(newCursorPos, newCursorPos);
-                this.textArea.focus();
-            }
-            
-            showResultPreview(result) {
-                this.status.className = `status`;
-                this.status.innerHTML = '';
-                for (let i = 0; i < result.length; i++) {
-                    const transcript = result[i].transcript;
-                    const p = document.createElement('p');
-                    p.textContent = transcript;
-                    p.style.color = result.isFinal ? '#044' : '#888';
-                    p.style.margin = '4px 4px';
-                    this.status.appendChild(p);
-                }
-            }
+                    if (shouldTalk && !recording) rec.start();
+                    else if (!shouldTalk && recording) rec.stop();
+                } catch (e) {}
+            }, [keys, key, recording]);
 
-            updateStatus(message, className = '') {
-                this.status.className = `status ${className}`;
-                this.status.textContent = message;
-            }
-            
-            initTTS() {
-                if (!this.ttsButton) return;
-                const supported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
-                if (!supported) {
-                    this.ttsButton.disabled = true;
-                    this.ttsButton.title = 'Text-to-speech is not supported in this browser';
-                    return;
-                }
-                this.ttsButton.addEventListener('click', () => this.speakSelectedOrAll());
-            }
+            const onTextChange = (e) => {
+                setText(e.target.value);
+                if (remember) localStorage.setItem('push2talk_text', e.target.value);
+            };
 
-            speakSelectedOrAll() {
-                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
-                let text = '';
-                const sel = window.getSelection ? window.getSelection() : null;
-                if (sel && sel.rangeCount > 0) {
-                    text = sel.toString().trim();
+            const onRememberChange = (e) => {
+                const checked = e.target.checked;
+                setRemember(checked);
+                if (checked) localStorage.setItem('push2talk_text', text);
+                else localStorage.removeItem('push2talk_text');
+            };
+
+            const onKeyChange = (e) => {
+                setKey(e.target.value);
+                localStorage.setItem('push2talk_key', e.target.value);
+            };
+
+            const speak = () => {
+                const t = (window.getSelection()?.toString() || text).trim();
+                if (t && window.speechSynthesis) {
+                    speechSynthesis.cancel();
+                    speechSynthesis.speak(new SpeechSynthesisUtterance(t));
                 }
-                if (!text && this.textArea) {
-                    text = this.textArea.value.trim();
-                }
-                if (!text) return;
-                try {
-                    window.speechSynthesis.cancel();
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    if (this.recognition && this.recognition.lang) {
-                        utterance.lang = this.recognition.lang;
-                    }
-                    window.speechSynthesis.speak(utterance);
-                } catch (e) {
-                    console.error('TTS error:', e);
-                }
-            }
-            
-            showBrowserWarning() {
-                this.browserWarning.style.display = 'block';
-                this.updateStatus('Speech recognition not supported', 'error');
-            }
+            };
+
+            return html`
+                <div class="container">
+                    <div class="header">
+                        <h1>Push-to-Talk Voice Transcription</h1>
+                        <button onClick=${speak} style="background: #4CAF50; color: white;">🔊 Speak</button>
+                    </div>
+                    ${warning && html`<div class="warning">⚠️ ${warning}</div>`}
+                    <p>Hold <strong>${key}</strong> and speak.</p>
+                    <textarea ref=${textAreaRef} value=${text} onInput=${onTextChange} class=${recording ? 'recording' : ''} />
+                    <div class="controls">
+                        <span>Hold:</span>
+                        <select value=${key} onChange=${onKeyChange}>
+                            <option>Ctrl</option>
+                            <option>Shift</option>
+                            <option>Ctrl+Shift</option>
+                        </select>
+                        <label>
+                            <input type="checkbox" checked=${remember} onChange=${onRememberChange} />
+                            Ask browser to save text
+                        </label>
+                        <span class="status">${interim}</span>
+                    </div>
+                </div>
+            `;
         }
-        
-        // Initialize the app when the page loads
-        window.addEventListener('DOMContentLoaded', () => {
-            new PushToTalkApp();
-        });
+
+        render(html`<${App} />`, document.body);
     </script>
 </body>
 </html>
