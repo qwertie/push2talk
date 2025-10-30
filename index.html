@@ -22,129 +22,177 @@
 </head>
 <body>
 
+    <script type="text/plain" id="mod-preact">
+        /* esm.sh - preact@10.19.3 - https://esm.sh/preact@10.19.3/es2022/preact.mjs */
+
+        var D,a,J,ne,C,j,K,$,Q,E={},X=[],oe=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i,F=Array.isArray;function b(e,_){for(var t in _)e[t]=_[t];return e}function Y(e){var _=e.parentNode;_&&_.removeChild(e)}function re(e,_,t){var i,o,r,l={};for(r in _)r=="key"?i=_[r]:r=="ref"?o=_[r]:l[r]=_[r];if(arguments.length>2&&(l.children=arguments.length>3?D.call(arguments,2):t),typeof e=="function"&&e.defaultProps!=null)for(r in e.defaultProps)l[r]===void 0&&(l[r]=e.defaultProps[r]);return S(e,l,i,o,null)}function S(e,_,t,i,o){var r={type:e,props:_,key:t,ref:i,__k:null,__:null,__b:0,__e:null,__d:void 0,__c:null,constructor:void 0,__v:o??++J,__i:-1,__u:0};return o==null&&a.vnode!=null&&a.vnode(r),r}function ae(){return{current:null}}function H(e){return e.children}function W(e,_){this.props=e,this.context=_}function P(e,_){if(_==null)return e.__?P(e.__,e.__i+1):null;for(var t;_<e.__k.length;_++)if((t=e.__k[_])!=null&&t.__e!=null)return t.__e;return typeof e.type=="function"?P(e):null}function Z(e){var _,t;if((e=e.__)!=null&&e.__c!=null){for(e.__e=e.__c.base=null,_=0;_<e.__k.length;_++)if((t=e.__k[_])!=null&&t.__e!=null){e.__e=e.__c.base=t.__e;break}return Z(e)}}function I(e){(!e.__d&&(e.__d=!0)&&C.push(e)&&!A.__r++||j!==a.debounceRendering)&&((j=a.debounceRendering)||K)(A)}function A(){var e,_,t,i,o,r,l,s,f;for(C.sort($);e=C.shift();)e.__d&&(_=C.length,i=void 0,r=(o=(t=e).__v).__e,s=[],f=[],(l=t.__P)&&((i=b({},o)).__v=o.__v+1,a.vnode&&a.vnode(i),B(l,i,o,t.__n,l.ownerSVGElement!==void 0,32&o.__u?[r]:null,s,r??P(o),!!(32&o.__u),f),i.__.__k[i.__i]=i,te(s,i,f),i.__e!=r&&Z(i)),C.length>_&&C.sort($));A.__r=0}function ee(e,_,t,i,o,r,l,s,f,u,p){var n,m,c,h,k,v=i&&i.__k||X,d=_.length;for(t.__d=f,ie(t,_,v),f=t.__d,n=0;n<d;n++)(c=t.__k[n])!=null&&typeof c!="boolean"&&typeof c!="function"&&(m=c.__i===-1?E:v[c.__i]||E,c.__i=n,B(e,c,m,o,r,l,s,f,u,p),h=c.__e,c.ref&&m.ref!=c.ref&&(m.ref&&O(m.ref,null,c),p.push(c.ref,c.__c||h,c)),k==null&&h!=null&&(k=h),65536&c.__u||m.__k===c.__k?f=_e(c,f,e):typeof c.type=="function"&&c.__d!==void 0?f=c.__d:h&&(f=h.nextSibling),c.__d=void 0,c.__u&=-196609);t.__d=f,t.__e=k}function ie(e,_,t){var i,o,r,l,s,f=_.length,u=t.length,p=u,n=0;for(e.__k=[],i=0;i<f;i++)(o=e.__k[i]=(o=_[i])==null||typeof o=="boolean"||typeof o=="function"?null:typeof o=="string"||typeof o=="number"||typeof o=="bigint"||o.constructor==String?S(null,o,null,null,o):F(o)?S(H,{children:o},null,null,null):o.constructor===void 0&&o.__b>0?S(o.type,o.props,o.key,o.ref?o.ref:null,o.__v):o)!=null?(o.__=e,o.__b=e.__b+1,s=se(o,t,l=i+n,p),o.__i=s,r=null,s!==-1&&(p--,(r=t[s])&&(r.__u|=131072)),r==null||r.__v===null?(s==-1&&n--,typeof o.type!="function"&&(o.__u|=65536)):s!==l&&(s===l+1?n++:s>l?p>f-l?n+=s-l:n--:n=s<l&&s==l-1?s-l:0,s!==i+n&&(o.__u|=65536))):(r=t[i])&&r.key==null&&r.__e&&(r.__e==e.__d&&(e.__d=P(r)),R(r,r,!1),t[i]=null,p--);if(p)for(i=0;i<u;i++)(r=t[i])!=null&&!(131072&r.__u)&&(r.__e==e.__d&&(e.__d=P(r)),R(r,r))}function _e(e,_,t){var i,o;if(typeof e.type=="function"){for(i=e.__k,o=0;i&&o<i.length;o++)i[o]&&(i[o].__=e,_=_e(i[o],_,t));return _}return e.__e!=_&&(t.insertBefore(e.__e,_||null),_=e.__e),_&&_.nextSibling}function le(e,_){return _=_||[],e==null||typeof e=="boolean"||(F(e)?e.some(function(t){le(t,_)}):_.push(e)),_}function se(e,_,t,i){var o=e.key,r=e.type,l=t-1,s=t+1,f=_[t];if(f===null||f&&o==f.key&&r===f.type)return t;if(i>(f!=null&&!(131072&f.__u)?1:0))for(;l>=0||s<_.length;){if(l>=0){if((f=_[l])&&!(131072&f.__u)&&o==f.key&&r===f.type)return l;l--}if(s<_.length){if((f=_[s])&&!(131072&f.__u)&&o==f.key&&r===f.type)return s;s++}}return-1}function z(e,_,t){_[0]==="-"?e.setProperty(_,t??""):e[_]=t==null?"":typeof t!="number"||oe.test(_)?t:t+"px"}function M(e,_,t,i,o){var r;e:if(_==="style")if(typeof t=="string")e.style.cssText=t;else{if(typeof i=="string"&&(e.style.cssText=i=""),i)for(_ in i)t&&_ in t||z(e.style,_,"");if(t)for(_ in t)i&&t[_]===i[_]||z(e.style,_,t[_])}else if(_[0]==="o"&&_[1]==="n")r=_!==(_=_.replace(/(PointerCapture)$|Capture$/,"$1")),_=_.toLowerCase()in e?_.toLowerCase().slice(2):_.slice(2),e.l||(e.l={}),e.l[_+r]=t,t?i?t.u=i.u:(t.u=Date.now(),e.addEventListener(_,r?q:G,r)):e.removeEventListener(_,r?q:G,r);else{if(o)_=_.replace(/xlink(H|:h)/,"h").replace(/sName$/,"s");else if(_!=="width"&&_!=="height"&&_!=="href"&&_!=="list"&&_!=="form"&&_!=="tabIndex"&&_!=="download"&&_!=="rowSpan"&&_!=="colSpan"&&_!=="role"&&_ in e)try{e[_]=t??"";break e}catch{}typeof t=="function"||(t==null||t===!1&&_[4]!=="-"?e.removeAttribute(_):e.setAttribute(_,t))}}function G(e){var _=this.l[e.type+!1];if(e.t){if(e.t<=_.u)return}else e.t=Date.now();return _(a.event?a.event(e):e)}function q(e){return this.l[e.type+!0](a.event?a.event(e):e)}function B(e,_,t,i,o,r,l,s,f,u){var p,n,m,c,h,k,v,d,y,x,T,w,V,U,N,g=_.type;if(_.constructor!==void 0)return null;128&t.__u&&(f=!!(32&t.__u),r=[s=_.__e=t.__e]),(p=a.__b)&&p(_);e:if(typeof g=="function")try{if(d=_.props,y=(p=g.contextType)&&i[p.__c],x=p?y?y.props.value:p.__:i,t.__c?v=(n=_.__c=t.__c).__=n.__E:("prototype"in g&&g.prototype.render?_.__c=n=new g(d,x):(_.__c=n=new W(d,x),n.constructor=g,n.render=ce),y&&y.sub(n),n.props=d,n.state||(n.state={}),n.context=x,n.__n=i,m=n.__d=!0,n.__h=[],n._sb=[]),n.__s==null&&(n.__s=n.state),g.getDerivedStateFromProps!=null&&(n.__s==n.state&&(n.__s=b({},n.__s)),b(n.__s,g.getDerivedStateFromProps(d,n.__s))),c=n.props,h=n.state,n.__v=_,m)g.getDerivedStateFromProps==null&&n.componentWillMount!=null&&n.componentWillMount(),n.componentDidMount!=null&&n.__h.push(n.componentDidMount);else{if(g.getDerivedStateFromProps==null&&d!==c&&n.componentWillReceiveProps!=null&&n.componentWillReceiveProps(d,x),!n.__e&&(n.shouldComponentUpdate!=null&&n.shouldComponentUpdate(d,n.__s,x)===!1||_.__v===t.__v)){for(_.__v!==t.__v&&(n.props=d,n.state=n.__s,n.__d=!1),_.__e=t.__e,_.__k=t.__k,_.__k.forEach(function(L){L&&(L.__=_)}),T=0;T<n._sb.length;T++)n.__h.push(n._sb[T]);n._sb=[],n.__h.length&&l.push(n);break e}n.componentWillUpdate!=null&&n.componentWillUpdate(d,n.__s,x),n.componentDidUpdate!=null&&n.__h.push(function(){n.componentDidUpdate(c,h,k)})}if(n.context=x,n.props=d,n.__P=e,n.__e=!1,w=a.__r,V=0,"prototype"in g&&g.prototype.render){for(n.state=n.__s,n.__d=!1,w&&w(_),p=n.render(n.props,n.state,n.context),U=0;U<n._sb.length;U++)n.__h.push(n._sb[U]);n._sb=[]}else do n.__d=!1,w&&w(_),p=n.render(n.props,n.state,n.context),n.state=n.__s;while(n.__d&&++V<25);n.state=n.__s,n.getChildContext!=null&&(i=b(b({},i),n.getChildContext())),m||n.getSnapshotBeforeUpdate==null||(k=n.getSnapshotBeforeUpdate(c,h)),ee(e,F(N=p!=null&&p.type===H&&p.key==null?p.props.children:p)?N:[N],_,t,i,o,r,l,s,f,u),n.base=_.__e,_.__u&=-161,n.__h.length&&l.push(n),v&&(n.__E=n.__=null)}catch(L){_.__v=null,f||r!=null?(_.__e=s,_.__u|=f?160:32,r[r.indexOf(s)]=null):(_.__e=t.__e,_.__k=t.__k),a.__e(L,_,t)}else r==null&&_.__v===t.__v?(_.__k=t.__k,_.__e=t.__e):_.__e=ue(t.__e,_,t,i,o,r,l,f,u);(p=a.diffed)&&p(_)}function te(e,_,t){_.__d=void 0;for(var i=0;i<t.length;i++)O(t[i],t[++i],t[++i]);a.__c&&a.__c(_,e),e.some(function(o){try{e=o.__h,o.__h=[],e.some(function(r){r.call(o)})}catch(r){a.__e(r,o.__v)}})}function ue(e,_,t,i,o,r,l,s,f){var u,p,n,m,c,h,k,v=t.props,d=_.props,y=_.type;if(y==="svg"&&(o=!0),r!=null){for(u=0;u<r.length;u++)if((c=r[u])&&"setAttribute"in c==!!y&&(y?c.localName===y:c.nodeType===3)){e=c,r[u]=null;break}}if(e==null){if(y===null)return document.createTextNode(d);e=o?document.createElementNS("http://www.w3.org/2000/svg",y):document.createElement(y,d.is&&d),r=null,s=!1}if(y===null)v===d||s&&e.data===d||(e.data=d);else{if(r=r&&D.call(e.childNodes),v=t.props||E,!s&&r!=null)for(v={},u=0;u<e.attributes.length;u++)v[(c=e.attributes[u]).name]=c.value;for(u in v)c=v[u],u=="children"||(u=="dangerouslySetInnerHTML"?n=c:u==="key"||u in d||M(e,u,null,c,o));for(u in d)c=d[u],u=="children"?m=c:u=="dangerouslySetInnerHTML"?p=c:u=="value"?h=c:u=="checked"?k=c:u==="key"||s&&typeof c!="function"||v[u]===c||M(e,u,c,v[u],o);if(p)s||n&&(p.__html===n.__html||p.__html===e.innerHTML)||(e.innerHTML=p.__html),_.__k=[];else if(n&&(e.innerHTML=""),ee(e,F(m)?m:[m],_,t,i,o&&y!=="foreignObject",r,l,r?r[0]:t.__k&&P(t,0),s,f),r!=null)for(u=r.length;u--;)r[u]!=null&&Y(r[u]);s||(u="value",h!==void 0&&(h!==e[u]||y==="progress"&&!h||y==="option"&&h!==v[u])&&M(e,u,h,v[u],!1),u="checked",k!==void 0&&k!==e[u]&&M(e,u,k,v[u],!1))}return e}function O(e,_,t){try{typeof e=="function"?e(_):e.current=_}catch(i){a.__e(i,t)}}function R(e,_,t){var i,o;if(a.unmount&&a.unmount(e),(i=e.ref)&&(i.current&&i.current!==e.__e||O(i,null,_)),(i=e.__c)!=null){if(i.componentWillUnmount)try{i.componentWillUnmount()}catch(r){a.__e(r,_)}i.base=i.__P=null,e.__c=void 0}if(i=e.__k)for(o=0;o<i.length;o++)i[o]&&R(i[o],_,t||typeof e.type!="function");t||e.__e==null||Y(e.__e),e.__=e.__e=e.__d=void 0}function ce(e,_,t){return this.constructor(e,t)}function fe(e,_,t){var i,o,r,l;a.__&&a.__(e,_),o=(i=typeof t=="function")?null:t&&t.__k||_.__k,r=[],l=[],B(_,e=(!i&&t||_).__k=re(H,null,[e]),o||E,E,_.ownerSVGElement!==void 0,!i&&t?[t]:o?null:_.firstChild?D.call(_.childNodes):null,r,!i&&t?t:o?o.__e:_.firstChild,i,l),te(r,e,l)}function pe(e,_){fe(e,_,pe)}function de(e,_,t){var i,o,r,l,s=b({},e.props);for(r in e.type&&e.type.defaultProps&&(l=e.type.defaultProps),_)r=="key"?i=_[r]:r=="ref"?o=_[r]:s[r]=_[r]===void 0&&l!==void 0?l[r]:_[r];return arguments.length>2&&(s.children=arguments.length>3?D.call(arguments,2):t),S(e.type,s,i||e.key,o||e.ref,null)}function he(e,_){var t={__c:_="__cC"+Q++,__:e,Consumer:function(i,o){return i.children(o)},Provider:function(i){var o,r;return this.getChildContext||(o=[],(r={})[_]=this,this.getChildContext=function(){return r},this.shouldComponentUpdate=function(l){this.props.value!==l.value&&o.some(function(s){s.__e=!0,I(s)})},this.sub=function(l){o.push(l);var s=l.componentWillUnmount;l.componentWillUnmount=function(){o.splice(o.indexOf(l),1),s&&s.call(l)}}),i.children}};return t.Provider.__=t.Consumer.contextType=t}D=X.slice,a={__e:function(e,_,t,i){for(var o,r,l;_=_.__;)if((o=_.__c)&&!o.__)try{if((r=o.constructor)&&r.getDerivedStateFromError!=null&&(o.setState(r.getDerivedStateFromError(e)),l=o.__d),o.componentDidCatch!=null&&(o.componentDidCatch(e,i||{}),l=o.__d),l)return o.__E=o}catch(s){e=s}throw e}},J=0,ne=function(e){return e!=null&&e.constructor==null},W.prototype.setState=function(e,_){var t;t=this.__s!=null&&this.__s!==this.state?this.__s:this.__s=b({},this.state),typeof e=="function"&&(e=e(b({},t),this.props)),e&&b(t,e),e!=null&&this.__v&&(_&&this._sb.push(_),I(this))},W.prototype.forceUpdate=function(e){this.__v&&(this.__e=!0,e&&this.__h.push(e),I(this))},W.prototype.render=H,C=[],K=typeof Promise=="function"?Promise.prototype.then.bind(Promise.resolve()):setTimeout,$=function(e,_){return e.__v.__b-_.__v.__b},A.__r=0,Q=0;export{W as Component,H as Fragment,de as cloneElement,he as createContext,re as createElement,ae as createRef,re as h,pe as hydrate,ne as isValidElement,a as options,fe as render,le as toChildArray};
+        //# sourceMappingURL=preact.mjs.map
+    </script>
+    <script type="text/plain" id="mod-hooks">
+        /* esm.sh - preact@10.19.3/hooks - https://esm.sh/preact@10.19.3/es2022/hooks.mjs */
+
+         import{options as r}from"/preact@10.19.3/es2022/preact.mjs";var c,o,H,b,v=0,x=[],p=[],g=r.__b,A=r.__r,C=r.diffed,F=r.__c,q=r.unmount;function l(_,n){r.__h&&r.__h(o,_,v||n),v=0;var u=o.__H||(o.__H={__:[],__h:[]});return _>=u.__.length&&u.__.push({__V:p}),u.__[_]}function k(_){return v=1,B(U,_)}function B(_,n,u){var t=l(c++,2);if(t.t=_,!t.__c&&(t.__=[u?u(n):U(void 0,n),function(a){var f=t.__N?t.__N[0]:t.__[0],s=t.t(f,a);f!==s&&(t.__N=[s,t.__[1]],t.__c.setState({}))}],t.__c=o,!o.u)){var i=function(a,f,s){if(!t.__c.__H)return!0;var m=t.__c.__H.__.filter(function(e){return e.__c});if(m.every(function(e){return!e.__N}))return!h||h.call(this,a,f,s);var V=!1;return m.forEach(function(e){if(e.__N){var P=e.__[0];e.__=e.__N,e.__N=void 0,P!==e.__[0]&&(V=!0)}}),!(!V&&t.__c.props===a)&&(!h||h.call(this,a,f,s))};o.u=!0;var h=o.shouldComponentUpdate,N=o.componentWillUpdate;o.componentWillUpdate=function(a,f,s){if(this.__e){var m=h;h=void 0,i(a,f,s),h=m}N&&N.call(this,a,f,s)},o.shouldComponentUpdate=i}return t.__N||t.__}function j(_,n){var u=l(c++,3);!r.__s&&y(u.__H,n)&&(u.__=_,u.i=n,o.__H.__h.push(u))}function I(_,n){var u=l(c++,4);!r.__s&&y(u.__H,n)&&(u.__=_,u.i=n,o.__h.push(u))}function w(_){return v=5,T(function(){return{current:_}},[])}function z(_,n,u){v=6,I(function(){return typeof _=="function"?(_(n()),function(){return _(null)}):_?(_.current=n(),function(){return _.current=null}):void 0},u==null?u:u.concat(_))}function T(_,n){var u=l(c++,7);return y(u.__H,n)?(u.__V=_(),u.i=n,u.__h=_,u.__V):u.__}function L(_,n){return v=8,T(function(){return _},n)}function M(_){var n=o.context[_.__c],u=l(c++,9);return u.c=_,n?(u.__==null&&(u.__=!0,n.sub(o)),n.props.value):_.__}function G(_,n){r.useDebugValue&&r.useDebugValue(n?n(_):_)}function J(_){var n=l(c++,10),u=k();return n.__=_,o.componentDidCatch||(o.componentDidCatch=function(t,i){n.__&&n.__(t,i),u[1](t)}),[u[0],function(){u[1](void 0)}]}function K(){var _=l(c++,11);if(!_.__){for(var n=o.__v;n!==null&&!n.__m&&n.__!==null;)n=n.__;var u=n.__m||(n.__m=[0,0]);_.__="P"+u[0]+"-"+u[1]++}return _.__}function R(){for(var _;_=x.shift();)if(_.__P&&_.__H)try{_.__H.__h.forEach(d),_.__H.__h.forEach(E),_.__H.__h=[]}catch(n){_.__H.__h=[],r.__e(n,_.__v)}}r.__b=function(_){o=null,g&&g(_)},r.__r=function(_){A&&A(_),c=0;var n=(o=_.__c).__H;n&&(H===o?(n.__h=[],o.__h=[],n.__.forEach(function(u){u.__N&&(u.__=u.__N),u.__V=p,u.__N=u.i=void 0})):(n.__h.forEach(d),n.__h.forEach(E),n.__h=[],c=0)),H=o},r.diffed=function(_){C&&C(_);var n=_.__c;n&&n.__H&&(n.__H.__h.length&&(x.push(n)!==1&&b===r.requestAnimationFrame||((b=r.requestAnimationFrame)||S)(R)),n.__H.__.forEach(function(u){u.i&&(u.__H=u.i),u.__V!==p&&(u.__=u.__V),u.i=void 0,u.__V=p})),H=o=null},r.__c=function(_,n){n.some(function(u){try{u.__h.forEach(d),u.__h=u.__h.filter(function(t){return!t.__||E(t)})}catch(t){n.some(function(i){i.__h&&(i.__h=[])}),n=[],r.__e(t,u.__v)}}),F&&F(_,n)},r.unmount=function(_){q&&q(_);var n,u=_.__c;u&&u.__H&&(u.__H.__.forEach(function(t){try{d(t)}catch(i){n=i}}),u.__H=void 0,n&&r.__e(n,u.__v))};var D=typeof requestAnimationFrame=="function";function S(_){var n,u=function(){clearTimeout(t),D&&cancelAnimationFrame(n),setTimeout(_)},t=setTimeout(u,100);D&&(n=requestAnimationFrame(u))}function d(_){var n=o,u=_.__c;typeof u=="function"&&(_.__c=void 0,u()),o=n}function E(_){var n=o;_.__c=_.__(),o=n}function y(_,n){return!_||_.length!==n.length||n.some(function(u,t){return u!==_[t]})}function U(_,n){return typeof n=="function"?n(_):n}export{L as useCallback,M as useContext,G as useDebugValue,j as useEffect,J as useErrorBoundary,K as useId,z as useImperativeHandle,I as useLayoutEffect,T as useMemo,B as useReducer,w as useRef,k as useState};
+        //# sourceMappingURL=hooks.mjs.map
+    </script>
+    <script type="text/plain" id="mod-htm">
+        /* esm.sh - htm@3.1.1 - https://esm.sh/htm@3.1.1/es2022/htm.mjs */
+
+        var a=function(p,f,c,n){var l;f[0]=0;for(var u=1;u<f.length;u++){var g=f[u++],o=f[u]?(f[0]|=g?1:2,c[f[u++]]):f[++u];g===3?n[0]=o:g===4?n[1]=Object.assign(n[1]||{},o):g===5?(n[1]=n[1]||{})[f[++u]]=o:g===6?n[1][f[++u]]+=o+"":g?(l=p.apply(o,a(p,o,c,["",null])),n.push(l),o[0]?f[0]|=2:(f[u-2]=0,f[u]=l)):n.push(o)}return n},M=new Map;function b(p){var f=M.get(this);return f||(f=new Map,M.set(this,f)),(f=a(this,f.get(p)||(f.set(p,f=function(c){for(var n,l,u=1,g="",o="",i=[0],s=function(v){u===1&&(v||(g=g.replace(/^\s*\n\s*|\s*\n\s*$/g,"")))?i.push(0,v,g):u===3&&(v||g)?(i.push(3,v,g),u=2):u===2&&g==="..."&&v?i.push(4,v,0):u===2&&g&&!v?i.push(5,0,!0,g):u>=5&&((g||!v&&u===5)&&(i.push(u,0,g,l),u=6),v&&(i.push(u,v,0,l),u=6)),g=""},t=0;t<c.length;t++){t&&(u===1&&s(),s(t));for(var w=0;w<c[t].length;w++)n=c[t][w],u===1?n==="<"?(s(),i=[i],u=3):g+=n:u===4?g==="--"&&n===">"?(u=1,g=""):g=n+g[0]:o?n===o?o="":g+=n:n==='"'||n==="'"?o=n:n===">"?(s(),u=1):u&&(n==="="?(u=5,l=g,g=""):n==="/"&&(u<5||c[t][w+1]===">")?(s(),u===3&&(i=i[0]),u=i,(i=i[0]).push(2,0,u),u=0):n===" "||n==="\t"||n===`
+`||n==="\r"?(s(),u=2):g+=n),u===3&&g==="!--"&&(u=4,i=i[0])}return s(),i}(p)),f),arguments,[])).length>1?f:f[0]}export{b as default};
+        //# sourceMappingURL=htm.mjs.map
+    </script>
+
     <script type="module">
-        import { h, Component, render } from 'https://esm.sh/preact@10.19.3';
-        import { useEffect, useRef, useState } from 'https://esm.sh/preact@10.19.3/hooks';
-        import htm from 'https://esm.sh/htm@3.1.1';
-
-        const html = htm.bind(h);
-
-        function App() {
-            const textAreaRef = useRef(null);
-            const recognitionRef = useRef(null);
-            const [text, setText] = useState('');
-            const [interim, setInterim] = useState('');
-            const [recording, setRecording] = useState(false);
-            const [warning, setWarning] = useState('');
-            const [key, setKey] = useState('Ctrl');
-            const [keys, setKeys] = useState({ ctrl: false, shift: false });
-            const [remember, setRemember] = useState(false);
-
-            useEffect(() => {
-                const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (!SR) return setWarning('Speech recognition not supported');
-
-                const rec = recognitionRef.current = new SR();
-                rec.continuous = true;
-                rec.interimResults = true;
-                rec.lang = 'en-US';
-
-                rec.onstart = () => setRecording(true);
-                rec.onend = () => { setRecording(false); setInterim(''); };
-                rec.onresult = (e) => {
-                    let final = '', temp = '';
-                    for (let i = e.resultIndex; i < e.results.length; i++) {
-                        const t = e.results[i][0].transcript;
-                        if (e.results[i].isFinal) final += t; else temp = t;
-                    }
-                    setInterim(temp);
-                    if (final) {
-                        const ta = textAreaRef.current;
-                        const start = ta.selectionStart, end = ta.selectionEnd;
-                        const newText = ta.value.slice(0, start) + final + ' ' + ta.value.slice(end);
-                        setText(newText);
-                        if (remember) localStorage.setItem('push2talk_text', newText);
-                        setTimeout(() => ta.setSelectionRange(start + final.length + 1, start + final.length + 1), 0);
-                    }
-                };
-                rec.onerror = (e) => setInterim(`Error: ${e.error}`);
-
-                // Load saved settings
-                const saved = localStorage.getItem('push2talk_text');
-                if (saved) { setText(saved); setRemember(true); }
-                setKey(localStorage.getItem('push2talk_key') || 'Ctrl');
-            }, []);
-
-            useEffect(() => {
-                const down = (e) => setKeys(k => ({ ...k, ctrl: e.key === 'Control' ? true : k.ctrl, shift: e.key === 'Shift' ? true : k.shift }));
-                const up = (e) => setKeys(k => ({ ...k, ctrl: e.key === 'Control' ? false : k.ctrl, shift: e.key === 'Shift' ? false : k.shift }));
-                document.addEventListener('keydown', down);
-                document.addEventListener('keyup', up);
-                return () => { document.removeEventListener('keydown', down); document.removeEventListener('keyup', up); };
-            }, []);
-
-            useEffect(() => {
-                const shouldTalk = key === 'Shift' ? keys.shift : key === 'Ctrl+Shift' ? keys.ctrl && keys.shift : keys.ctrl;
-                const rec = recognitionRef.current;
-                if (!rec) return;
-                try {
-                    if (shouldTalk && !recording) rec.start();
-                    else if (!shouldTalk && recording) rec.stop();
-                } catch (e) {}
-            }, [keys, key, recording]);
-
-            const onTextChange = (e) => {
-                setText(e.target.value);
-                if (remember) localStorage.setItem('push2talk_text', e.target.value);
-            };
-
-            const onRememberChange = (e) => {
-                const checked = e.target.checked;
-                setRemember(checked);
-                if (checked) localStorage.setItem('push2talk_text', text);
-                else localStorage.removeItem('push2talk_text');
-            };
-
-            const onKeyChange = (e) => {
-                setKey(e.target.value);
-                localStorage.setItem('push2talk_key', e.target.value);
-            };
-
-            const speak = () => {
-                const t = (window.getSelection()?.toString() || text).trim();
-                if (t && window.speechSynthesis) {
-                    speechSynthesis.cancel();
-                    speechSynthesis.speak(new SpeechSynthesisUtterance(t));
-                }
-            };
-
-            return html`
-                <div class="container">
-                    <div class="header">
-                        <h1>Push-to-Talk Voice Transcription</h1>
-                        <button onClick=${speak} style="background: #4CAF50; color: white;">🔊 Speak</button>
-                    </div>
-                    ${warning && html`<div class="warning">⚠️ ${warning}</div>`}
-                    <p>Hold <strong>${key}</strong> and speak.</p>
-                    <textarea ref=${textAreaRef} value=${text} onInput=${onTextChange} class=${recording ? 'recording' : ''} />
-                    <div class="controls">
-                        <span>Hold:</span>
-                        <select value=${key} onChange=${onKeyChange}>
-                            <option>Ctrl</option>
-                            <option>Shift</option>
-                            <option>Ctrl+Shift</option>
-                        </select>
-                        <label>
-                            <input type="checkbox" checked=${remember} onChange=${onRememberChange} />
-                            Ask browser to save text
-                        </label>
-                        <span class="status">${interim}</span>
-                    </div>
-                </div>
-            `;
+      // Helper function: pass a module name (like 'mod-preact') and optional string replacer
+      window.exportModule = function(moduleName, replacer) {
+        let code = document.getElementById(moduleName).textContent;
+        if (replacer) {
+          if (typeof replacer === 'function') code = replacer(code);
+          else if (typeof replacer === 'object') {
+            for (const [from, to] of Object.entries(replacer)) {
+              code = code.split(from).join(to);
+            }
+          }
         }
+        return URL.createObjectURL(new Blob([code], { type: 'text/javascript' }));
+      };
 
-        render(html`<${App} />`, document.body);
+      // importModule: exports a named inline module and imports it, returning { module, url }
+      window.importModule = async function(moduleName, replacer) {
+        const url = window.exportModule(moduleName, replacer);
+        const module = await import(url);
+        return { module, url };
+      };
+
+      // Import modules (and get their blob URLs)
+      const { module: preact, url: preactUrl } = await importModule('mod-preact');
+      const { module: hooks } = await importModule('mod-hooks', {
+        '"/preact@10.19.3/es2022/preact.mjs"': `"${preactUrl}"`
+      });
+      const { module: htmNS } = await importModule('mod-htm');
+      const { default: htm } = htmNS;
+
+      const { h, Component, render } = preact;
+      const { useEffect, useRef, useState } = hooks;
+
+      const html = htm.bind(h);
+
+      function App() {
+          const textAreaRef = useRef(null);
+          const recognitionRef = useRef(null);
+          const [text, setText] = useState('');
+          const [interim, setInterim] = useState('');
+          const [recording, setRecording] = useState(false);
+          const [warning, setWarning] = useState('');
+          const [key, setKey] = useState('Ctrl');
+          const [keys, setKeys] = useState({ ctrl: false, shift: false });
+          const [remember, setRemember] = useState(false);
+
+          useEffect(() => {
+              const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+              if (!SR) return setWarning('Speech recognition not supported');
+
+              const rec = recognitionRef.current = new SR();
+              rec.continuous = true;
+              rec.interimResults = true;
+              rec.lang = 'en-US';
+
+              rec.onstart = () => setRecording(true);
+              rec.onend = () => { setRecording(false); setInterim(''); };
+              rec.onresult = (e) => {
+                  let final = '', temp = '';
+                  for (let i = e.resultIndex; i < e.results.length; i++) {
+                      const t = e.results[i][0].transcript;
+                      if (e.results[i].isFinal) final += t; else temp = t;
+                  }
+                  setInterim(temp);
+                  if (final) {
+                      const ta = textAreaRef.current;
+                      const start = ta.selectionStart, end = ta.selectionEnd;
+                      const newText = ta.value.slice(0, start) + final + ' ' + ta.value.slice(end);
+                      setText(newText);
+                      if (remember) localStorage.setItem('push2talk_text', newText);
+                      setTimeout(() => ta.setSelectionRange(start + final.length + 1, start + final.length + 1), 0);
+                  }
+              };
+              rec.onerror = (e) => setInterim(`Error: ${e.error}`);
+
+              // Load saved settings
+              const saved = localStorage.getItem('push2talk_text');
+              if (saved) { setText(saved); setRemember(true); }
+              setKey(localStorage.getItem('push2talk_key') || 'Ctrl');
+          }, []);
+
+          useEffect(() => {
+              const down = (e) => setKeys(k => ({ ...k, ctrl: e.key === 'Control' ? true : k.ctrl, shift: e.key === 'Shift' ? true : k.shift }));
+              const up = (e) => setKeys(k => ({ ...k, ctrl: e.key === 'Control' ? false : k.ctrl, shift: e.key === 'Shift' ? false : k.shift }));
+              document.addEventListener('keydown', down);
+              document.addEventListener('keyup', up);
+              return () => { document.removeEventListener('keydown', down); document.removeEventListener('keyup', up); };
+          }, []);
+
+          useEffect(() => {
+              const shouldTalk = key === 'Shift' ? keys.shift : key === 'Ctrl+Shift' ? keys.ctrl && keys.shift : keys.ctrl;
+              const rec = recognitionRef.current;
+              if (!rec) return;
+              try {
+                  if (shouldTalk && !recording) rec.start();
+                  else if (!shouldTalk && recording) rec.stop();
+              } catch (e) {}
+          }, [keys, key, recording]);
+
+          const onTextChange = (e) => {
+              setText(e.target.value);
+              if (remember) localStorage.setItem('push2talk_text', e.target.value);
+          };
+
+          const onRememberChange = (e) => {
+              const checked = e.target.checked;
+              setRemember(checked);
+              if (checked) localStorage.setItem('push2talk_text', text);
+              else localStorage.removeItem('push2talk_text');
+          };
+
+          const onKeyChange = (e) => {
+              setKey(e.target.value);
+              localStorage.setItem('push2talk_key', e.target.value);
+          };
+
+          const speak = () => {
+              const t = (window.getSelection()?.toString() || text).trim();
+              if (t && window.speechSynthesis) {
+                  speechSynthesis.cancel();
+                  speechSynthesis.speak(new SpeechSynthesisUtterance(t));
+              }
+          };
+
+          return html`
+              <div class="container">
+                  <div class="header">
+                      <h1>Push-to-Talk Voice Transcription</h1>
+                      <button onClick=${speak} style="background: #4CAF50; color: white;">🔊 Speak</button>
+                  </div>
+                  ${warning && html`<div class="warning">⚠️ ${warning}</div>`}
+                  <p>Hold <strong>${key}</strong> and speak.</p>
+                  <textarea ref=${textAreaRef} value=${text} onInput=${onTextChange} class=${recording ? 'recording' : ''} />
+                  <div class="controls">
+                      <span>Hold:</span>
+                      <select value=${key} onChange=${onKeyChange}>
+                          <option>Ctrl</option>
+                          <option>Shift</option>
+                          <option>Ctrl+Shift</option>
+                      </select>
+                      <label>
+                          <input type="checkbox" checked=${remember} onChange=${onRememberChange} />
+                          Ask browser to save text
+                      </label>
+                      <span class="status">${interim}</span>
+                  </div>
+              </div>
+          `;
+      }
+
+      render(html`<${App} />`, document.body);
     </script>
 </body>
 </html>
