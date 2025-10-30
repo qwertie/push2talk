@@ -27,9 +27,42 @@
         }
         
         h1 {
-            text-align: center;
+            text-align: left;
             color: #333;
             margin-bottom: 10px;
+        }
+        
+        .header {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .header #ttsButton {
+            position: absolute;
+            right: 0;
+        }
+
+        #ttsButton {
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #4CAF50;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #ttsButton:hover:enabled {
+            background: #43a047;
+        }
+
+        #ttsButton:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
         }
         
         .instructions {
@@ -92,7 +125,10 @@
 </head>
 <body>
     <div class="container">
-        <h3>Push-to-Talk Voice Transcription</h3>
+        <div class="header">
+            <h1>Push-to-Talk Voice Transcription</h1>
+            <button id="ttsButton" title="Speak selected text or all text">Speak (TTS)</button>
+        </div>
         
         <div class="browser-support" id="browserWarning">
             ⚠️ Voice recognition may not be supported in your browser. This works best in Chrome or Edge.
@@ -130,6 +166,7 @@
                 this.rememberCheckbox = document.getElementById('rememberText');
                 this.activationSelect = document.getElementById('activationKey');
                 this.activationKeyLabel = document.getElementById('activationKeyLabel');
+                this.ttsButton = document.getElementById('ttsButton');
 
                 this.recognition = null;
                 this.isRecording = false;
@@ -164,6 +201,7 @@
                 this.updateStatus('Ready', 'ready');
                 this.initRememberCheckbox();
                 this.initActivationControl();
+                this.initTTS();
             }
 
             initRememberCheckbox() {
@@ -351,6 +389,40 @@
             updateStatus(message, className = '') {
                 this.status.className = `status ${className}`;
                 this.status.textContent = message;
+            }
+            
+            initTTS() {
+                if (!this.ttsButton) return;
+                const supported = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+                if (!supported) {
+                    this.ttsButton.disabled = true;
+                    this.ttsButton.title = 'Text-to-speech is not supported in this browser';
+                    return;
+                }
+                this.ttsButton.addEventListener('click', () => this.speakSelectedOrAll());
+            }
+
+            speakSelectedOrAll() {
+                if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) return;
+                let text = '';
+                const sel = window.getSelection ? window.getSelection() : null;
+                if (sel && sel.rangeCount > 0) {
+                    text = sel.toString().trim();
+                }
+                if (!text && this.textArea) {
+                    text = this.textArea.value.trim();
+                }
+                if (!text) return;
+                try {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    if (this.recognition && this.recognition.lang) {
+                        utterance.lang = this.recognition.lang;
+                    }
+                    window.speechSynthesis.speak(utterance);
+                } catch (e) {
+                    console.error('TTS error:', e);
+                }
             }
             
             showBrowserWarning() {
